@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{User, Album};
+use App\Models\{Photo, User, Album};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +26,8 @@ Route::get('/albums', function() {
 Route::get('/users', function() {
    return User::with('albums')
        ->paginate(5);
+});
+
+Route::get('/photos', function() {
+   return Photo::all();
 });
