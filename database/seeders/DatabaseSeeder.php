@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Album;
+use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,7 +22,21 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call(UserSeeder::class);
+
+        /*$this->call(UserSeeder::class);
         $this->call(AlbumSeeder::class);
+        $this->call(PhotoSeeder::class);
+        */
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        User::truncate();
+        Album::truncate();
+        Photo::truncate();
+
+        User::factory(20)->has(
+            Album::factory(10)->has(
+                Photo::factory(20)
+            )
+        )->create();
     }
 }
