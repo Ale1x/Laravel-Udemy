@@ -14,15 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/albums', function() {
-    return Album::all();
-});
-
-
 Route::get('/users', function() {
    return User::with('albums')
        ->paginate(5);
@@ -31,3 +22,5 @@ Route::get('/users', function() {
 Route::get('/photos', function() {
    return Photo::all();
 });
+
+Route::get('/', [AppController::class, 'staff']);
