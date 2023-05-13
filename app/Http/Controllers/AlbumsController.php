@@ -4,15 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AlbumsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Album::all();
+        //return Album::all();
+
+        /*
+         * RAW Query
+         */
+        $sql = "SELECT * FROM albums";
+        $where = ' ';
+
+        if($request->has('id')) {
+            $where .= "id=" . (int)$request->get('id');
+        }
+
+        if($request->has('album_name')) {
+            $where .= " AND album_name='" . (string)$request->get('album_name')."'";
+        }
+
+        $sql .= " WHERE" . $where;
+        //dd($sql);
+
+
+        return DB::select($sql);
     }
 
     /**
