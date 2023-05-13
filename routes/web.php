@@ -24,6 +24,7 @@ Route::get('/photos', function() {
    return Photo::all();
 });
 
-Route::get('/albums', [AlbumsController::class, 'index']);
 
 Route::get('/', [AppController::class, 'staff']);
+
+Route::resource('albums', AlbumsController::class);

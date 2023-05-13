@@ -77,8 +77,10 @@ class AlbumsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Album $album)
+    public function destroy(int $id)
     {
-        //
+        $sql = 'DELETE FROM albums WHERE id = ?';
+        Db::delete($sql, [$id]);
+
     }
 }
