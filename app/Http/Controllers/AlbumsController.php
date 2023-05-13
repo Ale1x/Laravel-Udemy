@@ -18,22 +18,20 @@ class AlbumsController extends Controller
         /*
          * RAW Query
          */
-        $sql = "SELECT * FROM albums";
-        $where = ' ';
+        $sql = "SELECT * FROM albums WHERE 1=1";
+        $where = [];
 
         if($request->has('id')) {
-            $where .= "id=" . (int)$request->get('id');
+            $where['id'] = $request->get('id');
+            $sql .= " AND ID=?";
         }
 
         if($request->has('album_name')) {
-            $where .= " AND album_name='" . (string)$request->get('album_name')."'";
+            $where['album_name'] = $request->get('album_name');
+            $sql .= " AND album_name=?";
         }
 
-        $sql .= " WHERE" . $where;
-        //dd($sql);
-
-
-        return DB::select($sql);
+        return DB::select($sql, array_values($where));
     }
 
     /**
