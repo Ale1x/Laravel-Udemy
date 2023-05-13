@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\AppController;
 use App\Models\{Photo, User, Album};
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AlbumsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,5 +23,7 @@ Route::get('/users', function() {
 Route::get('/photos', function() {
    return Photo::all();
 });
+
+Route::get('/albums', [AlbumsController::class, 'index']);
 
 Route::get('/', [AppController::class, 'staff']);

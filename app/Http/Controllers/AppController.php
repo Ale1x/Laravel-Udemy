@@ -8,6 +8,6 @@ class AppController extends Controller
 {
 
     public function staff() {
-        return view('prova.blade');
+        return view('welcome');
     }
 }
