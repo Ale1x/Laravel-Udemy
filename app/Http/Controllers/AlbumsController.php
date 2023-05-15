@@ -30,8 +30,8 @@ class AlbumsController extends Controller
             $where['album_name'] = $request->get('album_name');
             $sql .= " AND album_name=?";
         }
-
-        return DB::select($sql, array_values($where));
+        $albums = DB::select($sql, array_values($where));
+        return view('albums', ['albums' => $albums]);
     }
 
     /**
@@ -82,5 +82,13 @@ class AlbumsController extends Controller
         $sql = 'DELETE FROM albums WHERE id = ?';
         Db::delete($sql, [$id]);
 
+    }
+
+    public function delete(int $id)
+    {
+        $sql = 'DELETE FROM albums WHERE id= :id';
+        return Db::delete($sql, ['id' => $id]);
+
+        //return redirect()->back();
     }
 }

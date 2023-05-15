@@ -28,3 +28,5 @@ Route::get('/photos', function() {
 Route::get('/', [AppController::class, 'staff']);
 
 Route::resource('albums', AlbumsController::class);
+
+Route::get('/albums/{id}/delete', [AlbumsController::class, 'delete']);
