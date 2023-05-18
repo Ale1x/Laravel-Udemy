@@ -56,6 +56,8 @@ class AlbumsController extends Controller
     public function show(Album $album)
     {
         //
+        $sql = "SELECT * FROM albums where ID=:id";
+        return DB::select($sql, ['id' => $album->id]);
     }
 
     /**
@@ -79,10 +81,12 @@ class AlbumsController extends Controller
      */
     public function destroy(int $id)
     {
-        $sql = 'DELETE FROM albums WHERE id = ?';
-        Db::delete($sql, [$id]);
+        $sql = 'DELETE FROM albums WHERE id = :id';
+        $result = Db::delete($sql, ['id' => $id]);
 
+        return $result;
     }
+
 
     public function delete(int $id)
     {

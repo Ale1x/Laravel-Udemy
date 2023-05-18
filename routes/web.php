@@ -29,4 +29,6 @@ Route::get('/', [AppController::class, 'staff']);
 
 Route::resource('albums', AlbumsController::class);
 
-Route::get('/albums/{id}/delete', [AlbumsController::class, 'delete']);
+Route::delete('/albums/{id}', [AlbumsController::class, 'destroy']);
+
+Route::get('/albums/{id}', [AlbumsController::class, 'show']);

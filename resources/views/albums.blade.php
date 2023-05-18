@@ -2,14 +2,17 @@
 @section('title', 'Albums')
 @section('pageTitle', 'Albums')
 @section('body')
-    <ul class="list-group">
-        @foreach($albums as $album)
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>{{ $album->id }} -- {{ $album->album_name }}</span>
-                <a href="/albums/{{$album->id}}/delete" class="btn btn-danger">Delete</a>
-            </li>
-        @endforeach
-    </ul>
+    <form>
+        <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+        <ul class="list-group">
+            @foreach($albums as $album)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ $album->id }} -- {{ $album->album_name }}</span>
+                    <a href="/albums/{{$album->id}}" class="btn btn-danger">Delete</a>
+                </li>
+            @endforeach
+        </ul>
+    </form>
 @endsection
 
 @section('footer_js')
@@ -23,6 +26,10 @@
                 var li = ele.target.parentNode;
                 $.ajax(urlAlbum,
                     {
+                        method: 'DELETE',
+                        data : {
+                          _token : $('#_token').val()
+                        },
                         complete : function (resp) {
                             if(resp.responseText == 1) {
                                 li.parentNode.removeChild(li);
