@@ -32,3 +32,4 @@ Route::resource('albums', AlbumsController::class);
 Route::delete('/albums/{id}', [AlbumsController::class, 'destroy']);
 
 Route::get('/albums/{id}', [AlbumsController::class, 'show']);
+

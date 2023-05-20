@@ -4,11 +4,23 @@
 @section('body')
     <form>
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+        @if(session()->has('message'))
+            <x-alert-info type="{{ session('alertType') }}">
+                {{ session('message') }}
+            </x-alert-info>
+        @endif
+
         <ul class="list-group">
             @foreach($albums as $album)
+
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $album->id }} -- {{ $album->album_name }}</span>
-                    <a href="/albums/{{$album->id}}" class="btn btn-danger">Delete</a>
+                    <div>
+                        <a href="{{route('albums.edit',
+                        ['album' => $album->id])}}"
+                           class="btn btn-primary">Update</a>
+                        <a href="/albums/{{$album->id}}" class="btn btn-danger">Delete</a>
+                    </div>
                 </li>
             @endforeach
         </ul>
@@ -19,7 +31,8 @@
     @parent
     <script>
         $(document).ready(function() {
-            $('ul').on('click', 'a', function(ele) {
+            $('div.alert-info').fadeOut(5000);
+            $('ul').on('click', 'a.btn-danger', function(ele) {
                 ele.preventDefault();
 
                 var urlAlbum = $(this).attr('href');

@@ -31,7 +31,7 @@ class AlbumsController extends Controller
             $sql .= " AND album_name=?";
         }
         $albums = DB::select($sql, array_values($where));
-        return view('albums', ['albums' => $albums]);
+        return view('albums.albums', ['albums' => $albums]);
     }
 
     /**
@@ -65,15 +65,34 @@ class AlbumsController extends Controller
      */
     public function edit(Album $album)
     {
-        //
+        $sql = "SELECT * FROM albums WHERE ID=:id";
+        $albumEdit = Db::select($sql, ['id' => $album->id]);
+
+        return view('albums.editalbum')->withAlbum($albumEdit[0]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Album $album)
+    public function update(Request $request, int $album)
     {
-        //
+        $data = $request->only(['album_name', 'description']);
+        $data['id'] = $album;
+
+        $sql = "UPDATE albums SET album_name=:album_name, description=:description WHERE id=:id";
+        $res = DB::update($sql, $data);
+
+        if ($res) {  // Se l'aggiornamento è andato a buon fine
+            session()->flash('message', 'Aggiornamento riuscito!');
+            session()->flash('alertType', 'primary');
+        } else {  // Se l'aggiornamento non è andato a buon fine
+            session()->flash('message', 'Aggiornamento fallito!');
+            session()->flash('alertType', 'danger');
+        }
+
+        return redirect()->route('albums.index');
+
+
     }
 
     /**
