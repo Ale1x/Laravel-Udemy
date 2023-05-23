@@ -3,12 +3,14 @@
 @section('pageTitle', 'Albums')
 @section('body')
     <form>
-        <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+        @csrf
         @if(session()->has('message'))
             <x-alert-info type="{{ session('alertType') }}">
                 {{ session('message') }}
             </x-alert-info>
         @endif
+
+        <a href="{{route('albums.create')}}" class="btn btn-success mb-3">Add New Album</a>
 
         <ul class="list-group">
             @foreach($albums as $album)
@@ -31,7 +33,7 @@
     @parent
     <script>
         $(document).ready(function() {
-            $('div.alert-info').fadeOut(5000);
+            $('div.alert').fadeOut(5000);
             $('ul').on('click', 'a.btn-danger', function(ele) {
                 ele.preventDefault();
 
@@ -41,7 +43,7 @@
                     {
                         method: 'DELETE',
                         data : {
-                          _token : $('#_token').val()
+                            _token : $('#_token').val()
                         },
                         complete : function (resp) {
                             if(resp.responseText == 1) {

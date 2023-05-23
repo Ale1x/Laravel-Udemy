@@ -30,6 +30,8 @@ class AlbumsController extends Controller
             $where['album_name'] = $request->get('album_name');
             $sql .= " AND album_name=?";
         }
+
+        $sql .= " ORDER BY id DESC";
         $albums = DB::select($sql, array_values($where));
         return view('albums.albums', ['albums' => $albums]);
     }
@@ -39,7 +41,7 @@ class AlbumsController extends Controller
      */
     public function create()
     {
-        //
+        return view('albums.createalbum');
     }
 
     /**
@@ -47,7 +49,27 @@ class AlbumsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only(['album_name', 'description']);
+        $data['user_id'] = 1;
+        $data['album_thumb'] = '';
+        $sql = "INSERT INTO albums (album_name, description, user_id, album_thumb)
+                values (:album_name, :description, :user_id, :album_thumb)";
+
+        $res = DB::insert(
+            $sql,
+            $data
+        );
+
+        if ($res) {  // Se l'aggiornamento è andato a buon fine
+            session()->flash('message', 'Aggiornamento riuscito!');
+            session()->flash('alertType', 'primary');
+        } else {  // Se l'aggiornamento non è andato a buon fine
+            session()->flash('message', 'Aggiornamento fallito!');
+            session()->flash('alertType', 'danger');
+        }
+
+        return redirect()->route('albums.index');
+
     }
 
     /**
