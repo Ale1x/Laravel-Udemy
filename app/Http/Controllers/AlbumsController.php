@@ -13,27 +13,20 @@ class AlbumsController extends Controller
      */
     public function index(Request $request)
     {
-        //return Album::all();
 
-        /*
-         * RAW Query
-         */
-        $sql = "SELECT * FROM albums WHERE 1=1";
-        $where = [];
+        $queryBuilder = DB::table('albums')->orderBy('id', 'DESC');
 
         if($request->has('id')) {
-            $where['id'] = $request->get('id');
-            $sql .= " AND ID=?";
+            $queryBuilder->where('id', $request->input('id'));
         }
 
         if($request->has('album_name')) {
-            $where['album_name'] = $request->get('album_name');
-            $sql .= " AND album_name=?";
+            $queryBuilder->where('album_name', 'LIKE', $request->input('album_name').'%');
         }
 
-        $sql .= " ORDER BY id DESC";
-        $albums = DB::select($sql, array_values($where));
+        $albums = $queryBuilder->get();
         return view('albums.albums', ['albums' => $albums]);
+
     }
 
     /**
@@ -52,18 +45,13 @@ class AlbumsController extends Controller
         $data = $request->only(['album_name', 'description']);
         $data['user_id'] = 1;
         $data['album_thumb'] = '';
-        $sql = "INSERT INTO albums (album_name, description, user_id, album_thumb)
-                values (:album_name, :description, :user_id, :album_thumb)";
 
-        $res = DB::insert(
-            $sql,
-            $data
-        );
+        $queryBuilder =  DB::table('albums')->insert($data);
 
-        if ($res) {  // Se l'aggiornamento è andato a buon fine
+        if ($queryBuilder) {
             session()->flash('message', 'Aggiornamento riuscito!');
             session()->flash('alertType', 'primary');
-        } else {  // Se l'aggiornamento non è andato a buon fine
+        } else {
             session()->flash('message', 'Aggiornamento fallito!');
             session()->flash('alertType', 'danger');
         }
@@ -77,9 +65,10 @@ class AlbumsController extends Controller
      */
     public function show(Album $album)
     {
-        //
-        $sql = "SELECT * FROM albums where ID=:id";
-        return DB::select($sql, ['id' => $album->id]);
+
+        $queryBuilder = DB::table('albums')->where('id', $album->id);
+
+        return $queryBuilder;
     }
 
     /**
@@ -87,10 +76,9 @@ class AlbumsController extends Controller
      */
     public function edit(Album $album)
     {
-        $sql = "SELECT * FROM albums WHERE ID=:id";
-        $albumEdit = Db::select($sql, ['id' => $album->id]);
+        $albums = DB::table('albums')->where('id', $album->id)->get();
 
-        return view('albums.editalbum')->withAlbum($albumEdit[0]);
+        return view('albums.editalbum')->withAlbum($albums[0]);
     }
 
     /**
@@ -99,21 +87,19 @@ class AlbumsController extends Controller
     public function update(Request $request, int $album)
     {
         $data = $request->only(['album_name', 'description']);
-        $data['id'] = $album;
 
-        $sql = "UPDATE albums SET album_name=:album_name, description=:description WHERE id=:id";
-        $res = DB::update($sql, $data);
+        $queryBuilder = DB::table('albums')->where('id', "=", $album)->update($data);
 
-        if ($res) {  // Se l'aggiornamento è andato a buon fine
+
+        if ($queryBuilder) {
             session()->flash('message', 'Aggiornamento riuscito!');
             session()->flash('alertType', 'primary');
-        } else {  // Se l'aggiornamento non è andato a buon fine
+        } else {
             session()->flash('message', 'Aggiornamento fallito!');
             session()->flash('alertType', 'danger');
         }
 
         return redirect()->route('albums.index');
-
 
     }
 
@@ -122,17 +108,18 @@ class AlbumsController extends Controller
      */
     public function destroy(int $id)
     {
-        $sql = 'DELETE FROM albums WHERE id = :id';
-        $result = Db::delete($sql, ['id' => $id]);
+        $queryBuilder = DB::table('albums')->delete('id');
 
-        return $result;
+        return $queryBuilder;
+
     }
 
 
     public function delete(int $id)
     {
-        $sql = 'DELETE FROM albums WHERE id= :id';
-        return Db::delete($sql, ['id' => $id]);
+        $queryBuilder = DB::table('albums')->delete('id');
+
+        return $queryBuilder;
 
         //return redirect()->back();
     }
