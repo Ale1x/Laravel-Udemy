@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Album
@@ -35,6 +36,12 @@ use Illuminate\Database\Eloquent\Model;
 class Album extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    protected $fillable = ['album_name', 'description', 'user_id', 'album_thumb'];
+    // protected $table = 'albums'; -- Nome tabella (se diverso dal default)
+    // protected $primaryKey = 'id'; .. Primary key se differente da id
+
 
     public function photos() {
         return $this->hasMany(Photo::class);
