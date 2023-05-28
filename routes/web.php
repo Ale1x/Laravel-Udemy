@@ -25,13 +25,6 @@ Route::get('/photos', function() {
    return Photo::all();
 });
 
-Route::get('/usersnoalbum', function() {
-   $usersNoAlbum = DB::table('users as u')
-       ->leftJoin('albums as a', 'u.id', '=','a.user_id')->select('u.id', 'email', 'name', 'album_name')->whereNull('album_name')->get();
-
-   return $usersNoAlbum;
-});
-
 Route::get('/', [AppController::class, 'staff']);
 
 Route::resource('albums', AlbumsController::class);
