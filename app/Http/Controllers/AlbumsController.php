@@ -42,9 +42,8 @@ class AlbumsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['album_name', 'description']);
+        $data = $request->only(['album_name', 'description', 'album_thumb']);
         $data['user_id'] = 1;
-        $data['album_thumb'] = '';
 
         $queryBuilder =  Album::insert($data);
 
@@ -82,7 +81,7 @@ class AlbumsController extends Controller
      */
     public function update(Request $request, Album $album)
     {
-        $data = $request->only(['album_name', 'description']);
+        $data = $request->only(['album_name', 'description', 'album_thumb']);
 
         $response = $album->update($data);
 

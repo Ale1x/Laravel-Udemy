@@ -8,7 +8,7 @@
             <div class="col-md-6 offset-md-3">
                 <div class="card my-5">
                     <div class="card-body">
-                        <form method="post" action="{{route('albums.store')}}">
+                        <form method="post" action="{{route('albums.store')}}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-4">
                                 <label for="name">Name</label>
@@ -18,6 +18,11 @@
                             <div class="form-group mb-4">
                                 <label for="description">Description</label>
                                 <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="album_thumb">Album Thumb</label>
+                                <input type="file" required class="form-control" name="album_thumb" id="album_thumb" placeholder="Enter Album Thumb URL">
                             </div>
 
                             <div class="form-group">

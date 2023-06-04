@@ -17,6 +17,11 @@
 
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $album->id }} -- {{ $album->album_name }}</span>
+                    @if($album->album_thumb)
+                        <div class="mb-4">
+                            <img width="300" height="150" src="{{$album->album_thumb}}" alt="{{$album->album_name}}" title="{{$album->album_name}}">
+                        </div>
+                    @endif
                     <div>
                         <a href="{{route('albums.edit',
                         ['album' => $album->id])}}"
